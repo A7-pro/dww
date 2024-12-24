@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import threading
 from flask import Flask, request
+import time
 
 # توكن البوت
 API_TOKEN = '7534795874:AAGehbCQR8h82qcNI1zabmFYdqg3satj4ag'
@@ -141,8 +142,7 @@ def get_updates():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-bot.set_webhook(url="https://dww-5t0x.onrender.com/" + API_TOKEN)
-
+    bot.set_webhook(url="https://dww-5t0x.onrender.com/" + API_TOKEN)
     return "Webhook is set!", 200
 
 # بدء السيرفر
