@@ -141,7 +141,8 @@ def get_updates():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://your-render-url.com/" + API_TOKEN)
+bot.set_webhook(url="https://dww-5t0x.onrender.com/" + API_TOKEN)
+
     return "Webhook is set!", 200
 
 # بدء السيرفر
