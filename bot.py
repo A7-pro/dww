@@ -3,7 +3,9 @@ import telebot
 import tweepy
 import os
 from dotenv import load_dotenv
+from threading import Thread
 
+# إنشاء تطبيق Flask
 app = Flask(__name__)
 
 # تحميل متغيرات البيئة
@@ -28,14 +30,14 @@ twitter_api = tweepy.API(auth)
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 # هاشتاقات ثابتة
-HASHTAGS = "#الأهلي #AlAhli #دوري_روشن"
+HASHTAGS = "#abdullah_streams دوري_روشن"
 
 # استقبال الرسائل من القناة
 @bot.channel_post_handler(content_types=['text', 'photo', 'video'])
 def handle_channel_message(message):
     if message.chat.username == CHANNEL_USERNAME.lstrip('@'):
         caption = message.caption if message.caption else message.text
-        tweet_text = f"{caption}\n\nتابع الحساب الأساسي: @koora_ahli\nتابع الحساب الأساسي: @a7_be7\n\n{HASHTAGS}"
+        tweet_text = f"{caption}\\n\\nتابع الحساب الأساسي: @koora_ahli\\nتابع الحساب الأساسي: @a7_be7\\n\\n{HASHTAGS}"
         
         if message.photo or message.video:
             file_id = message.photo[-1].file_id if message.photo else message.video.file_id
@@ -48,10 +50,17 @@ def handle_channel_message(message):
         
         bot.send_message(message.chat.id, "✅ تم نشر التغريدة بنجاح!")
 
-# تشغيل البوت بشكل مباشر لمنع التعارض
+# تشغيل البوت في Thread حتى لا يتوقف Flask
+def run_bot():
+    bot.polling(none_stop=True)
+
+Thread(target=run_bot).start()
+
+# تشغيل Flask لتفادي إيقاف Render
 @app.route('/')
 def home():
     return "Bot is running!"
 
 if __name__ == "__main__":
-    bot.polling(none_stop=True)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
