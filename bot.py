@@ -13,7 +13,7 @@ load_dotenv()
 
 # مفاتيح تيليجرام
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CHANNEL_ID = os.getenv("CHANNEL_ID")  # استخدم Channel ID بدلًا من اسم المستخدم
+USER_ID = os.getenv("USER_ID")  # ID المستخدم بدلاً من القناة
 
 # مفاتيح تويتر
 TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
@@ -35,13 +35,13 @@ HASHTAGS = "#الأهلي #AlAhli #دوري_روشن"
 # أمر /start للترحيب بالمستخدمين
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "👋 أهلاً وسهلاً! هذا البوت يقوم بنشر رسائل القناة تلقائيًا على تويتر.\n\n"
-                          "📌 فقط أرسل رسالة في القناة، وسيتم نشرها على تويتر تلقائيًا ✅")
+    bot.reply_to(message, "👋 أهلاً وسهلاً! هذا البوت يقوم بنشر رسائلك تلقائيًا على تويتر.\n\n"
+                          "📌 فقط أرسل رسالة هنا، وسيتم نشرها على تويتر تلقائيًا ✅")
 
-# استقبال الرسائل من القناة
-@bot.channel_post_handler(content_types=['text', 'photo', 'video'])
-def handle_channel_message(message):
-    if str(message.chat.id) == CHANNEL_ID:
+# استقبال الرسائل الخاصة فقط
+@bot.message_handler(content_types=['text', 'photo', 'video'])
+def handle_private_message(message):
+    if str(message.chat.id) == USER_ID:
         caption = message.caption if message.caption else message.text
         tweet_text = f"{caption}\n\nتابع الحساب الأساسي: @koora_ahli\nتابع الحساب الأساسي: @a7_be7\n\n{HASHTAGS}"
         
