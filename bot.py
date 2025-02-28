@@ -72,9 +72,14 @@ def debug_message(message):
 
 # تشغيل البوت في Thread حتى لا يتوقف Flask
 def run_bot():
-    bot.infinity_polling(timeout=10, long_polling_timeout=5)
+    while True:
+        try:
+            bot.polling(none_stop=True, timeout=10, long_polling_timeout=5)
+        except Exception as e:
+            print(f"⚠️ خطأ في التشغيل: {e}")
+            continue
 
-Thread(target=run_bot).start()
+Thread(target=run_bot, daemon=True).start()
 
 # تشغيل Flask لتفادي إيقاف Render
 @app.route('/')
