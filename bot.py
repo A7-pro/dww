@@ -42,8 +42,7 @@ def send_welcome(message):
 # تصحيح لاستقبال الرسائل الخاصة فقط
 @bot.message_handler(func=lambda message: True)
 def debug_message(message):
-    bot.reply_to(message, f"📌 استلمت رسالتك!
-🔹 ID الخاص بك: {message.chat.id}")
+    bot.reply_to(message, f"📌 استلمت رسالتك!\n🔹 ID الخاص بك: {message.chat.id}")
     if str(message.chat.id) != USER_ID:
         bot.reply_to(message, "🚫 هذا البوت مخصص لحساب معين فقط!")
         return
