@@ -3,7 +3,6 @@ import telebot
 import tweepy
 import os
 from dotenv import load_dotenv
-from threading import Thread
 
 app = Flask(__name__)
 
@@ -49,12 +48,10 @@ def handle_channel_message(message):
         
         bot.send_message(message.chat.id, "✅ تم نشر التغريدة بنجاح!")
 
-# تشغيل البوت في Thread حتى لا يتعطل Flask
-Thread(target=bot.polling, kwargs={"none_stop": True}).start()
-
+# تشغيل البوت بشكل مباشر لمنع التعارض
 @app.route('/')
 def home():
     return "Bot is running!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    bot.polling(none_stop=True)
