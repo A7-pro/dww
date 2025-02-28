@@ -30,7 +30,7 @@ twitter_api = tweepy.API(auth)
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 # هاشتاقات ثابتة
-HASHTAGS = "#abdullah_streams دوري_روشن"
+HASHTAGS = "#abdullah_streams"
 
 # استقبال الرسائل من القناة
 @bot.channel_post_handler(content_types=['text', 'photo', 'video'])
