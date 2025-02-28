@@ -13,7 +13,7 @@ load_dotenv()
 
 # مفاتيح تيليجرام
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
+CHANNEL_ID = os.getenv("CHANNEL_ID")  # استخدم Channel ID بدلًا من اسم المستخدم
 
 # مفاتيح تويتر
 TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
@@ -30,14 +30,20 @@ twitter_api = tweepy.API(auth)
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 # هاشتاقات ثابتة
-HASHTAGS = "#abdullah_streams"
+HASHTAGS = "#الأهلي #AlAhli #دوري_روشن"
+
+# أمر /start للترحيب بالمستخدمين
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "👋 أهلاً وسهلاً! هذا البوت يقوم بنشر رسائل القناة تلقائيًا على تويتر.\n\n"
+                          "📌 فقط أرسل رسالة في القناة، وسيتم نشرها على تويتر تلقائيًا ✅")
 
 # استقبال الرسائل من القناة
 @bot.channel_post_handler(content_types=['text', 'photo', 'video'])
 def handle_channel_message(message):
-    if message.chat.username == CHANNEL_USERNAME.lstrip('@'):
+    if str(message.chat.id) == CHANNEL_ID:
         caption = message.caption if message.caption else message.text
-        tweet_text = f"{caption}\\n\\nتابع الحساب الأساسي: @koora_ahli\\nتابع الحساب الأساسي: @a7_be7\\n\\n{HASHTAGS}"
+        tweet_text = f"{caption}\n\nتابع الحساب الأساسي: @koora_ahli\nتابع الحساب الأساسي: @a7_be7\n\n{HASHTAGS}"
         
         if message.photo or message.video:
             file_id = message.photo[-1].file_id if message.photo else message.video.file_id
